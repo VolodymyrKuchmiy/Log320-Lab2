@@ -1,20 +1,20 @@
 public class Case {
 
-    private String lettre;
-    private String numero;
+    private char lettre;
+    private int numero;
     private Piece piece;
 
-    public Case(String lettre, String numero, Piece piece) {
+    public Case(char lettre, int numero, Piece piece) {
         this.lettre = lettre;
         this.numero = numero;
         this.piece = piece;
     }
 
-    public String getLettre() {
+    public char getLettre() {
         return this.lettre;
     }
 
-    public String getNumero() {
+    public int getNumero() {
         return this.numero;
     }
 
@@ -22,11 +22,11 @@ public class Case {
         return this.piece;
     }
 
-    public void setLettre(String lettre) {
+    public void setLettre(char lettre) {
         this.lettre = lettre;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 

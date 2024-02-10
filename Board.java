@@ -8,11 +8,16 @@ public class Board {
         this.board = initialiserBoard();
     }
 
+    // fonction qui initialise le board. Elle remplit le board avec cases vides.
     public Case[][] initialiserBoard() {
-        Case[][] board = new Case[DIMENSION_LARGEUR][DIMENSION_HAUTEUR];
-        for (int i = 0; i < DIMENSION_LARGEUR; i++) {
-            for (int j = 0; j < DIMENSION_HAUTEUR; j++) {
-                //
+        Case[][] board = new Case[DIMENSION_LARGEUR][DIMENSION_HAUTEUR]; // initialisation se fait de haut gauche vers
+                                                                         // bas droite
+        for (int i = DIMENSION_LARGEUR; i > 0; i--) { // on parcourt les lignes et on descend de 8 vers 1
+            for (char lettre = 'A'; lettre <= 'H'; lettre++) { // on parcourt les colonnes et on monte de A vers H
+                board[DIMENSION_LARGEUR - i][lettre - 65] = new Case(lettre, i, new Piece(0));
+                System.out.println("Board [" + (DIMENSION_LARGEUR - i) + "][" + (lettre - 65) + "]"
+                        + " -  Case cree: au ligne " + lettre
+                        + " et au colonne " + i); // Aux fins de deboguage
             }
         }
         return board;
