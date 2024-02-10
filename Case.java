@@ -34,4 +34,7 @@ public class Case {
         this.piece = piece;
     }
 
+    public void afficherPiecePrint() {
+        System.out.print(this.piece.getNumero() + " \t");
+    }
 }

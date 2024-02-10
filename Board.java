@@ -6,6 +6,7 @@ public class Board {
 
     public Board() {
         this.board = initialiserBoard();
+        this.afficherBoardPrint();
     }
 
     // fonction qui initialise le board. Elle remplit le board avec cases vides.
@@ -21,5 +22,21 @@ public class Board {
             }
         }
         return board;
+    }
+
+    public Case[][] initialiserPieces() {
+
+        return this.board;
+    }
+
+    public void afficherBoardPrint() {
+        for (int i = DIMENSION_LARGEUR; i > 0; i--) { // on parcourt les lignes et on descend de 8 vers 1
+            for (char lettre = 'A'; lettre <= 'H'; lettre++) { // on parcourt les colonnes et on monte de A vers H
+                this.board[DIMENSION_LARGEUR - i][lettre - 65] = new Case(lettre, i, new Piece(0));
+                this.board[DIMENSION_LARGEUR - i][lettre - 65].afficherPiecePrint(); // Aux fins de
+                                                                                     // affichage
+            }
+            System.out.println();
+        }
     }
 }
