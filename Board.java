@@ -6,10 +6,12 @@ public class Board {
 
     public Board() {
         this.board = initialiserBoard();
-        this.afficherBoardPrint();
+        initialiserPieces();
+        afficherBoardPrint();
     }
 
-    // fonction qui initialise le board. Elle remplit le board avec cases vides.
+    // fonction qui initialise le board. Elle remplit le board avec cases vides et
+    // le retourne
     public Case[][] initialiserBoard() {
         Case[][] board = new Case[DIMENSION_LARGEUR][DIMENSION_HAUTEUR]; // initialisation se fait de haut gauche vers
                                                                          // bas droite
@@ -25,18 +27,29 @@ public class Board {
     }
 
     public Case[][] initialiserPieces() {
-
+        // initialisation case rouge
+        for (int i = 1; i < 7; i++) {
+            this.board[i][0].setPiece(new Piece(4));
+            this.board[i][7].setPiece(new Piece(4));
+        }
+        // initialisation case noire
+        for (int i = 1; i < 7; i++) {
+            this.board[0][i].setPiece(new Piece(2));
+            this.board[7][i].setPiece(new Piece(2));
+        }
         return this.board;
     }
 
+    // fonction qui affiche en print toutes les pieces de board
     public void afficherBoardPrint() {
         for (int i = DIMENSION_LARGEUR; i > 0; i--) { // on parcourt les lignes et on descend de 8 vers 1
             for (char lettre = 'A'; lettre <= 'H'; lettre++) { // on parcourt les colonnes et on monte de A vers H
-                this.board[DIMENSION_LARGEUR - i][lettre - 65] = new Case(lettre, i, new Piece(0));
                 this.board[DIMENSION_LARGEUR - i][lettre - 65].afficherPiecePrint(); // Aux fins de
                                                                                      // affichage
             }
             System.out.println();
         }
     }
+
+    // public void
 }
