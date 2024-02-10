@@ -7,7 +7,7 @@ public class Board {
     public Board() {
         this.board = initialiserBoard();
         initialiserPieces();
-        afficherBoardPrint();
+        // afficherBoardPrint(); //debogguage
     }
 
     // fonction qui initialise le board. Elle remplit le board avec cases vides et
@@ -26,14 +26,12 @@ public class Board {
         return board;
     }
 
+    // methode qui ajoute piece noirs et rouges sur le board
     public Case[][] initialiserPieces() {
         // initialisation case rouge
         for (int i = 1; i < 7; i++) {
             this.board[i][0].setPiece(new Piece(4));
             this.board[i][7].setPiece(new Piece(4));
-        }
-        // initialisation case noire
-        for (int i = 1; i < 7; i++) {
             this.board[0][i].setPiece(new Piece(2));
             this.board[7][i].setPiece(new Piece(2));
         }
@@ -51,5 +49,22 @@ public class Board {
         }
     }
 
-    // public void
+    public Case getPiece(Case caseAtrouver) {
+        Case caseTrouvee = null;
+        for (int i = 0; i < DIMENSION_HAUTEUR; i++) {
+            for (int j = 0; j < DIMENSION_LARGEUR; j++) {
+                if (this.board[i][j].getLettre() == caseAtrouver.getLettre() &&
+                        this.board[i][j].getNumero() == caseAtrouver.getNumero()) {
+                    caseTrouvee = this.board[i][j];
+                }
+            }
+        }
+        return caseTrouvee;
+    }
+
+    public void movePiece(Case caseInitiale, Case caseFinale) {
+        int pieceType = this.getPiece(caseInitiale).getNumero();
+        this.getPiece(caseFinale).setNumero(pieceType); // mettre la piece sur caseFinale
+        this.getPiece(caseInitiale).setNumero(0); // enlever la piece de la caseInitiale
+    }
 }
