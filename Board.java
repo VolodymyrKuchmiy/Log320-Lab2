@@ -28,7 +28,7 @@ public class Board {
 
     // methode qui ajoute piece noirs et rouges sur le board
     public Case[][] initialiserPieces() {
-        // initialisation case rouge
+        // initialisation case rouge et noir
         for (int i = 1; i < 7; i++) {
             this.board[i][0].setPiece(new Piece(4));
             this.board[i][7].setPiece(new Piece(4));
@@ -49,22 +49,31 @@ public class Board {
         }
     }
 
-    public Case getPiece(Case caseAtrouver) {
-        Case caseTrouvee = null;
+    public int[] getCase(Case caseAtrouver) {
+        // il y a une autre maniere de faire - avec retour de Case mais jsp comment le
+        // bien implementer
+        int[] coordonnees = new int[2]; // on utilise un tableau avec coordonees de la case
         for (int i = 0; i < DIMENSION_HAUTEUR; i++) {
             for (int j = 0; j < DIMENSION_LARGEUR; j++) {
                 if (this.board[i][j].getLettre() == caseAtrouver.getLettre() &&
                         this.board[i][j].getNumero() == caseAtrouver.getNumero()) {
-                    caseTrouvee = this.board[i][j];
+                    coordonnees[0] = i;
+                    coordonnees[1] = j;
+                    System.out.println("Case trouve: sur ligne" + i + ", colonne " + j + ", de valeur "
+                            + this.board[i][j].getPiece().getNumero()); // pour debugging
                 }
             }
         }
-        return caseTrouvee;
+        return coordonnees;
     }
 
+    // Temporairement c'est ça la gestion de mouvement. Ce n'est pas parfait car en
+    // theorie ca permet de faire de moves illegales (Pour le moment)
     public void movePiece(Case caseInitiale, Case caseFinale) {
-        int pieceType = this.getPiece(caseInitiale).getNumero();
-        this.getPiece(caseFinale).setNumero(pieceType); // mettre la piece sur caseFinale
-        this.getPiece(caseInitiale).setNumero(0); // enlever la piece de la caseInitiale
+        int[] initialCords = getCase(caseInitiale);
+        int[] finalCords = getCase(caseFinale);
+        this.board[finalCords[0]][finalCords[1]].getPiece().setNumero(caseFinale.getPiece().getNumero());
+        this.board[initialCords[0]][initialCords[1]].getPiece().setNumero(0); // supposant qu'apres le mouvement, la
+                                                                              // case initiale sera vide
     }
 }
