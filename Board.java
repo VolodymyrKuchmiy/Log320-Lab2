@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Board {
 
     private static final int DIMENSION_LARGEUR = 8;
@@ -7,7 +10,6 @@ public class Board {
     public Board() {
         this.board = initialiserBoard();
         initialiserPieces();
-        // afficherBoardPrint(); //debogguage
     }
 
     // fonction qui initialise le board. Elle remplit le board avec cases vides et
@@ -49,6 +51,8 @@ public class Board {
         }
     }
 
+    // methode qui retourne coordonnees de case dans un board
+    // sert a traduire la forme de case comme A8 en [0,0]
     public int[] getCase(Case caseAtrouver) {
         // il y a une autre maniere de faire - avec retour de Case mais jsp comment le
         // bien implementer
@@ -59,8 +63,11 @@ public class Board {
                         this.board[i][j].getNumero() == caseAtrouver.getNumero()) {
                     coordonnees[0] = i;
                     coordonnees[1] = j;
-                    System.out.println("Case trouve: sur ligne" + i + ", colonne " + j + ", de valeur "
-                            + this.board[i][j].getPiece().getNumero()); // pour debugging
+
+                    // System.out.println("Case trouve: sur ligne" + i + ", colonne " + j +
+                    // ", de valeur "
+                    // + this.board[i][j].getPiece().getNumero()); // pour debugging
+
                 }
             }
         }
@@ -76,4 +83,53 @@ public class Board {
         this.board[initialCords[0]][initialCords[1]].getPiece().setNumero(0); // supposant qu'apres le mouvement, la
                                                                               // case initiale sera vide
     }
+
+    // pour obtenir un tableau de case voisines pour une case concrete.
+    // on peut avoir besoin de ce methode pour condition de victoire.
+    // retourne tableau autour de la case.
+    public void obtenirCasesVoisins(Case caseInspectee) {
+
+    }
+
+    public int[] obtenirNbPieces(Case caseInspectee) {
+        int[] moves = { 0, 0, 0, 0 }; // chaque case de tableau va indiquer combien de pieces se trouvent sur une
+                                      // ligne specifique, par defaut a 0 car on compte la caseInspectee
+        int[][] directions = { { 0, 1 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, 1 }, { 1, -1 } };
+        // un tableau des vecteurs de mouvement possibles
+
+        // parcours en horizontale et en verticale
+        for (int i = 0; i < DIMENSION_HAUTEUR; i++) {
+            Case caseCouranteHorizontale = board[getCase(caseInspectee)[0]][i * directions[0][1]]; // parcours
+                                                                                                   // horizontal
+            Case caseCouranteVerticale = board[i * directions[1][0]][getCase(caseInspectee)[1]]; // parcours vertical
+            if (caseCouranteHorizontale.getPiece().getNumero() == caseInspectee.getPiece().getNumero()) {
+                // verification que case avec meme piece existe sur la ligne
+                System.out.println("Case inspectee en H: " + getCase(caseCouranteHorizontale)[0] + " "
+                        + getCase(caseCouranteHorizontale)[1]);
+                moves[0]++; // incrementation de qtte cases en horizontal
+            } else if (caseCouranteVerticale.getPiece().getNumero() == caseInspectee.getPiece().getNumero()) {
+                System.out.println("Case inspectee en H: " + getCase(caseCouranteVerticale)[0] + " "
+                        + getCase(caseCouranteVerticale)[1]);
+                moves[1]++;
+            }
+        }
+        System.out.println(moves[0]);
+        System.out.println(moves[1]);
+        return moves;
+    }
+
+    // retourne un tableau de moves possibles pour une piece concrete
+    public Move[] movesPossibles(Piece piece) {
+        Move[] listeMovesPossibles = new Move[DIMENSION_LARGEUR]; // on suppose que la quantite de moves possibles
+                                                                  // maximum est 8 (2 horizontales, 2 verticales et 4
+                                                                  // diagonales)
+        // moves horizontales possibles
+
+        // moves verticales possibles
+
+        // moves diagonales possibles
+
+        return listeMovesPossibles;
+    }
+
 }

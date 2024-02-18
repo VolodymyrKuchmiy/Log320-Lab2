@@ -6,9 +6,12 @@ public class Test {
         Case caseInitiale = new Case('A', 2, new Piece(4)); // pour tester que le
         // mouvement de pieces fonctionne bien
         Case caseFinale = new Case('B', 2, new Piece(4));
-        System.out.println("En haut est un board initialise, on fait un move A2-B2:");
-        board.movePiece(caseInitiale, caseFinale);
-        board.afficherBoardPrint();
+        // Debugging
+        // System.out.println("En haut est un board initialise, on fait un move
+        // A2-B2:");
+        // board.movePiece(caseInitiale, caseFinale);
+        // board.afficherBoardPrint();
+        board.obtenirNbPieces(caseInitiale);
     }
 
 }
