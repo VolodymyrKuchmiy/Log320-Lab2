@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -6,6 +7,7 @@ public class Board {
     private static final int DIMENSION_LARGEUR = 8;
     private static final int DIMENSION_HAUTEUR = 8;
     private Case[][] board;
+    private int[] compteurPieces = { 12, 12 }; // chaque indice indique qtte pieces pour un joueur
 
     public Board() {
         this.board = initialiserBoard();
@@ -19,10 +21,12 @@ public class Board {
                                                                          // bas droite
         for (int i = DIMENSION_LARGEUR; i > 0; i--) { // on parcourt les lignes et on descend de 8 vers 1
             for (char lettre = 'A'; lettre <= 'H'; lettre++) { // on parcourt les colonnes et on monte de A vers H
-                board[DIMENSION_LARGEUR - i][lettre - 65] = new Case(lettre, i, new Piece(0));
+                board[DIMENSION_LARGEUR - i][lettre - 65] = new Case(lettre, i, new Piece(0), DIMENSION_LARGEUR - i,
+                        lettre - 'A');
                 System.out.println("Board [" + (DIMENSION_LARGEUR - i) + "][" + (lettre - 65) + "]"
                         + " -  Case cree: au ligne " + lettre
-                        + " et au colonne " + i); // Aux fins de deboguage
+                        + " et au colonne " + i + " dont coordonnees sont: " + (DIMENSION_LARGEUR - i)
+                        + (lettre - 'A')); // Aux fins de deboguage
             }
         }
         return board;
@@ -51,8 +55,22 @@ public class Board {
         }
     }
 
+    public Case obtenirCaseAPartirCoordonnees(int x, int y) {
+        Case caseCherchee = null;
+        for (int k = 0; k < DIMENSION_HAUTEUR; k++) {
+            for (int l = 0; l < DIMENSION_LARGEUR; l++) {
+                if (this.board[k][l].getI() == x && this.board[k][l].getJ() == y) {
+                    caseCherchee = this.board[k][l];
+                }
+            }
+        }
+        return caseCherchee;
+    }
+
     // methode qui retourne coordonnees de case dans un board
     // sert a traduire la forme de case comme A8 en [0,0]
+    // independant des attributs i et j de case parce que ces valeurs ont ete
+    // ajoutees plus tard
     public int[] getCase(Case caseAtrouver) {
         // il y a une autre maniere de faire - avec retour de Case mais jsp comment le
         // bien implementer
@@ -63,23 +81,20 @@ public class Board {
                         this.board[i][j].getNumero() == caseAtrouver.getNumero()) {
                     coordonnees[0] = i;
                     coordonnees[1] = j;
-
                     // System.out.println("Case trouve: sur ligne" + i + ", colonne " + j +
                     // ", de valeur "
                     // + this.board[i][j].getPiece().getNumero()); // pour debugging
-
                 }
             }
         }
         return coordonnees;
     }
 
-    // Temporairement c'est ça la gestion de mouvement. Ce n'est pas parfait car en
-    // theorie ca permet de faire de moves illegales (Pour le moment)
-    public void movePiece(Case caseInitiale, Case caseFinale) {
-        int[] initialCords = getCase(caseInitiale);
-        int[] finalCords = getCase(caseFinale);
-        this.board[finalCords[0]][finalCords[1]].getPiece().setNumero(caseFinale.getPiece().getNumero());
+    // Temporairement c'est ça la gestion de mouvement.
+    public void movePiece(Move move) {
+        int[] initialCords = getCase(move.getCaseDebut());
+        int[] finalCords = getCase(move.getCaseFin());
+        this.board[finalCords[0]][finalCords[1]].getPiece().setNumero(move.getCaseDebut().getPiece().getNumero());
         this.board[initialCords[0]][initialCords[1]].getPiece().setNumero(0); // supposant qu'apres le mouvement, la
                                                                               // case initiale sera vide
     }
@@ -88,47 +103,108 @@ public class Board {
     // on peut avoir besoin de ce methode pour condition de victoire.
     // retourne tableau autour de la case.
     public void obtenirCasesVoisins(Case caseInspectee) {
+        int x = getCase(caseInspectee)[0];
+        int y = getCase(caseInspectee)[1];
 
     }
 
+    // methode extremment pas optimisee
     public int[] obtenirNbPieces(Case caseInspectee) {
-        int[] moves = { 0, 0, 0, 0 }; // chaque case de tableau va indiquer combien de pieces se trouvent sur une
-                                      // ligne specifique, par defaut a 0 car on compte la caseInspectee
+        int[] longueurMoves = { 0, 0, 0, 0 }; // chaque case de tableau va indiquer combien de pieces se trouvent sur
+                                              // une
+        // ligne specifique, par defaut a 0 car on compte la caseInspectee
         int[][] directions = { { 0, 1 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, 1 }, { 1, -1 } };
-        // un tableau des vecteurs de mouvement possibles
+
+        int x = getCase(caseInspectee)[0];
+        int y = getCase(caseInspectee)[1];
 
         // parcours en horizontale et en verticale
         for (int i = 0; i < DIMENSION_HAUTEUR; i++) {
-            Case caseCouranteHorizontale = board[getCase(caseInspectee)[0]][i * directions[0][1]]; // parcours
-                                                                                                   // horizontal
-            Case caseCouranteVerticale = board[i * directions[1][0]][getCase(caseInspectee)[1]]; // parcours vertical
-            if (caseCouranteHorizontale.getPiece().getNumero() == caseInspectee.getPiece().getNumero()) {
-                // verification que case avec meme piece existe sur la ligne
-                System.out.println("Case inspectee en H: " + getCase(caseCouranteHorizontale)[0] + " "
-                        + getCase(caseCouranteHorizontale)[1]);
-                moves[0]++; // incrementation de qtte cases en horizontal
-            } else if (caseCouranteVerticale.getPiece().getNumero() == caseInspectee.getPiece().getNumero()) {
-                System.out.println("Case inspectee en H: " + getCase(caseCouranteVerticale)[0] + " "
-                        + getCase(caseCouranteVerticale)[1]);
-                moves[1]++;
+            Case caseCouranteHorizontale = board[x][i * directions[0][1]]; // parcours horizontal
+            Case caseCouranteVerticale = board[i * directions[1][0]][y]; // parcours vertical
+
+            if (caseCouranteHorizontale != null && caseCouranteHorizontale.getPiece() != null
+                    && caseCouranteHorizontale.getPiece().getNumero() != 0) {
+                longueurMoves[0]++; // incrementation de qtte cases en horizontal
+            }
+            if (caseCouranteVerticale != null && caseCouranteVerticale.getPiece() != null
+                    && caseCouranteVerticale.getPiece().getNumero() != 0) {
+                longueurMoves[1]++; // incrementation de qtte cases en vertical
+            }
+
+            // vérification des diagonales
+            // une diagonale est separee en deux et on parcours chaque separement
+            if (horsBoard(x + i * directions[4][0], y + i * directions[4][1])) {
+                Case caseCouranteDiagonale = board[x + i * directions[4][0]][y + i * directions[4][1]];
+                if (caseCouranteDiagonale != null && caseCouranteDiagonale.getPiece() != null
+                        && caseCouranteDiagonale.getPiece().getNumero() != 0) {
+                    longueurMoves[2]++; // incrementation de qtte cases en diagonale bas droit
+                }
+            }
+            if (horsBoard(x + i * directions[3][0], y + i * directions[3][1])) {
+                Case caseCaseDiagonale = board[x + i * directions[3][0]][y + i * directions[3][1]];
+                if (caseCaseDiagonale != null && caseCaseDiagonale.getPiece() != null
+                        && caseCaseDiagonale.getPiece().getNumero() != 0) {
+                    longueurMoves[3]++; // incrementation de qtte cases en diagonale haut droit
+                }
+            }
+            if (horsBoard(x + i * directions[2][0], y + i * directions[2][1])) {
+                Case caseCaseDiagonale = board[x + i * directions[2][0]][y + i * directions[2][1]];
+                if (caseCaseDiagonale != null && caseCaseDiagonale.getPiece() != null
+                        && caseCaseDiagonale.getPiece().getNumero() != 0
+                        && getCase(caseInspectee)[0] != x + i * directions[2][0]
+                        && getCase(caseInspectee)[1] != y + i * directions[2][1]) {
+                    longueurMoves[2]++; // incrementation de qtte cases en diagonale haut gauche
+                } // conditions de plus pour ne pas compter case inspectee une autre fois
+            }
+            if (horsBoard(x + i * directions[5][0], y + i * directions[5][1])) {
+                Case caseCaseDiagonale = board[x + i * directions[5][0]][y + i * directions[5][1]];
+                if (caseCaseDiagonale != null && caseCaseDiagonale.getPiece() != null
+                        && caseCaseDiagonale.getPiece().getNumero() != 0
+                        && getCase(caseInspectee)[0] != x + i * directions[5][0]
+                        && getCase(caseInspectee)[1] != y + i * directions[5][1]) {
+                    longueurMoves[3]++; // incrementation de qtte cases en diagonale bas gauche
+                } // conditions de plus pour ne pas compter case inspectee une autre fois
             }
         }
-        System.out.println(moves[0]);
-        System.out.println(moves[1]);
-        return moves;
+        // pour deboguage
+        System.out.println("Case inspectee: " + caseInspectee.getLettre() + caseInspectee.getNumero());
+        System.out.println("Horizontal: " + longueurMoves[0]);
+        System.out.println("Vertical: " + longueurMoves[1]);
+        System.out.println("Diagonale haut vers bas: " + longueurMoves[2]);
+        System.out.println("Diagonale bas vers haut: " + longueurMoves[3]);
+        return longueurMoves;
     }
 
-    // retourne un tableau de moves possibles pour une piece concrete
-    public Move[] movesPossibles(Piece piece) {
-        Move[] listeMovesPossibles = new Move[DIMENSION_LARGEUR]; // on suppose que la quantite de moves possibles
-                                                                  // maximum est 8 (2 horizontales, 2 verticales et 4
-                                                                  // diagonales)
-        // moves horizontales possibles
+    private boolean horsBoard(int row, int column) {
+        return row >= 0 && row < DIMENSION_HAUTEUR && column >= 0 && column < DIMENSION_LARGEUR;
+    }
 
-        // moves verticales possibles
+    // retourne un tableau de longueurMoves possibles pour une piece concrete
+    public ArrayList<Case> movesPossibles(Case caseInspectee) {
 
-        // moves diagonales possibles
-
+        ArrayList<Case> listeMovesPossibles = new ArrayList<Case>();
+        int[] longueurMoves = obtenirNbPieces(caseInspectee);
+        // Moves possibles
+        for (int i = 0; i < longueurMoves.length; i++) {
+            int qtteCasesMove = longueurMoves[i];
+            Case caseCourante = caseInspectee;
+            char lettre = caseCourante.getLettre();
+            // en horizontale
+            if (horsBoard(caseCourante.getI(), caseCourante.getJ() + qtteCasesMove) && i == 0) {// vers droite
+                caseCourante.setJ(caseCourante.getJ() + qtteCasesMove);
+                caseCourante.setLettre((char) (lettre + qtteCasesMove));
+                listeMovesPossibles.add(caseCourante);
+            }
+            if (horsBoard(caseCourante.getI(), caseCourante.getJ() - qtteCasesMove) && i == 0) {
+                caseCourante.setJ(caseCourante.getJ() - qtteCasesMove);
+                caseCourante.setLettre((char) (lettre - qtteCasesMove));
+                listeMovesPossibles.add(caseCourante);
+            }
+        }
+        for (Case case1 : listeMovesPossibles) {
+            System.out.println("Move possible sur: " + case1.getLettre() + case1.getNumero());
+        }
         return listeMovesPossibles;
     }
 

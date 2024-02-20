@@ -2,16 +2,16 @@ public class Test {
     // Class qui sert a faire des tests;
     public static void main(String[] args) {
         Board board = new Board();
-        board.afficherBoardPrint();
-        Case caseInitiale = new Case('A', 2, new Piece(4)); // pour tester que le
-        // mouvement de pieces fonctionne bien
-        Case caseFinale = new Case('B', 2, new Piece(4));
+        Case caseInitiale = new Case('A', 2, new Piece(4), 6, 0); // pour tester que le
+        Case caseFinale = new Case('D', 2, new Piece(4), 7, 3);
+        Move move1 = new Move(caseInitiale, caseFinale);
         // Debugging
         // System.out.println("En haut est un board initialise, on fait un move
         // A2-B2:");
-        // board.movePiece(caseInitiale, caseFinale);
-        // board.afficherBoardPrint();
-        board.obtenirNbPieces(caseInitiale);
+        board.movePiece(move1);
+        board.afficherBoardPrint();
+        // board.obtenirNbPieces(caseFinale);
+        board.movesPossibles(caseFinale);
     }
 
 }
