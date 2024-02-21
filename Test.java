@@ -8,7 +8,7 @@ public class Test {
         // Debugging
         // System.out.println("En haut est un board initialise, on fait un move
         // A2-B2:");
-        board.movePiece(move1);
+        board.movePiece(move1); // pour tester mouvements, et dans futur, evaluation de movesPossibles
         board.afficherBoardPrint();
         // board.obtenirNbPieces(caseFinale);
         board.movesPossibles(caseFinale);
