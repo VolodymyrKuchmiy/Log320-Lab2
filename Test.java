@@ -3,7 +3,7 @@ public class Test {
     public static void main(String[] args) {
         Board board = new Board();
         Case caseInitiale = new Case('A', 2, new Piece(4), 6, 0); // pour tester que le
-        Case caseFinale = new Case('D', 2, new Piece(4), 7, 3);
+        Case caseFinale = new Case('D', 4, new Piece(4), 4, 3);
         Move move1 = new Move(caseInitiale, caseFinale);
         // Debugging
         // System.out.println("En haut est un board initialise, on fait un move

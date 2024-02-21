@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Board {
@@ -25,8 +26,9 @@ public class Board {
                         lettre - 'A');
                 System.out.println("Board [" + (DIMENSION_LARGEUR - i) + "][" + (lettre - 65) + "]"
                         + " -  Case cree: au ligne " + lettre
-                        + " et au colonne " + i + " dont coordonnees sont: " + (DIMENSION_LARGEUR - i)
-                        + (lettre - 'A')); // Aux fins de deboguage
+                        + " et au colonne " + i + " dont coordonnees sont: "
+                        + board[DIMENSION_LARGEUR - i][lettre - 65].getI()
+                        + board[DIMENSION_LARGEUR - i][lettre - 65].getJ()); // Aux fins de deboguage
             }
         }
         return board;
@@ -169,10 +171,10 @@ public class Board {
         }
         // pour deboguage
         System.out.println("Case inspectee: " + caseInspectee.getLettre() + caseInspectee.getNumero());
-        System.out.println("Horizontal: " + longueurMoves[0]);
-        System.out.println("Vertical: " + longueurMoves[1]);
-        System.out.println("Diagonale haut vers bas: " + longueurMoves[2]);
-        System.out.println("Diagonale bas vers haut: " + longueurMoves[3]);
+        System.out.println("Cases sur ligne horizontal: " + longueurMoves[0]);
+        System.out.println("Cases sur ligne verticale: " + longueurMoves[1]);
+        System.out.println("Cases sur la diagonale haut vers bas: " + longueurMoves[2]);
+        System.out.println("Cases sur la diagonale bas vers haut: " + longueurMoves[3]);
         return longueurMoves;
     }
 
@@ -181,29 +183,99 @@ public class Board {
     }
 
     // retourne un tableau de longueurMoves possibles pour une piece concrete
-    public ArrayList<Case> movesPossibles(Case caseInspectee) {
+    public List<Case> movesPossibles(Case caseInspectee) {
 
-        ArrayList<Case> listeMovesPossibles = new ArrayList<Case>();
+        List<Case> listeMovesPossibles = new ArrayList<Case>();
         int[] longueurMoves = obtenirNbPieces(caseInspectee);
         // Moves possibles
         for (int i = 0; i < longueurMoves.length; i++) {
             int qtteCasesMove = longueurMoves[i];
-            Case caseCourante = caseInspectee;
-            char lettre = caseCourante.getLettre();
+            char lettre = caseInspectee.getLettre();
+            int numero = caseInspectee.getNumero();
             // en horizontale
-            if (horsBoard(caseCourante.getI(), caseCourante.getJ() + qtteCasesMove) && i == 0) {// vers droite
-                caseCourante.setJ(caseCourante.getJ() + qtteCasesMove);
+            if (horsBoard(caseInspectee.getI(), caseInspectee.getJ() + qtteCasesMove) && i == 0) {// vers droite
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
                 caseCourante.setLettre((char) (lettre + qtteCasesMove));
                 listeMovesPossibles.add(caseCourante);
             }
-            if (horsBoard(caseCourante.getI(), caseCourante.getJ() - qtteCasesMove) && i == 0) {
-                caseCourante.setJ(caseCourante.getJ() - qtteCasesMove);
+            if (horsBoard(caseInspectee.getI(), caseInspectee.getJ() - qtteCasesMove) && i == 0) {// vers gauche
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
                 caseCourante.setLettre((char) (lettre - qtteCasesMove));
                 listeMovesPossibles.add(caseCourante);
             }
+            // en verticale
+            if (horsBoard(caseInspectee.getI() + qtteCasesMove, caseInspectee.getJ()) && i == 1) {// vers haut
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setI(caseInspectee.getI() + qtteCasesMove);
+                caseCourante.setNumero(numero + qtteCasesMove);
+                listeMovesPossibles.add(caseCourante);
+            }
+            if (horsBoard(caseInspectee.getI() - qtteCasesMove, caseInspectee.getJ()) && i == 1) {// vers bas
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setI(caseInspectee.getI() - qtteCasesMove);
+                caseCourante.setNumero(numero - qtteCasesMove);
+                listeMovesPossibles.add(caseCourante);
+            }
+            // en diagonale haut vers bas
+            if (horsBoard(caseInspectee.getI() + qtteCasesMove, caseInspectee.getJ() - qtteCasesMove) && i == 2) {// vers
+                                                                                                                  // bas
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setI(caseInspectee.getI() + qtteCasesMove);
+                caseCourante.setJ(caseInspectee.getJ() - qtteCasesMove);
+                caseCourante.setLettre((char) (lettre + qtteCasesMove));
+                caseCourante.setNumero(numero - qtteCasesMove);
+                listeMovesPossibles.add(caseCourante);
+            }
+            if (horsBoard(caseInspectee.getI() - qtteCasesMove, caseInspectee.getJ() + qtteCasesMove) && i == 2) {// vers
+                                                                                                                  // haut
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setI(caseInspectee.getI() - qtteCasesMove);
+                caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
+                caseCourante.setLettre((char) (lettre - qtteCasesMove));
+                caseCourante.setNumero(numero + qtteCasesMove);
+                listeMovesPossibles.add(caseCourante);
+            }
+            // en diagonale bas vers haut
+            if (horsBoard(caseInspectee.getI() - qtteCasesMove, caseInspectee.getJ() - qtteCasesMove) && i == 3) {// vers
+                // bas
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setI(caseInspectee.getI() - qtteCasesMove);
+                caseCourante.setJ(caseInspectee.getJ() - qtteCasesMove);
+                caseCourante.setLettre((char) (lettre - qtteCasesMove));
+                caseCourante.setNumero(numero - qtteCasesMove);
+                listeMovesPossibles.add(caseCourante);
+            }
+            if (horsBoard(caseInspectee.getI() + qtteCasesMove, caseInspectee.getJ() + qtteCasesMove) && i == 3) {// vers
+                // haut
+                Case caseCourante = new Case(caseInspectee.getLettre(), caseInspectee.getNumero(),
+                        caseInspectee.getPiece(),
+                        caseInspectee.getI(), caseInspectee.getJ());
+                caseCourante.setI(caseInspectee.getI() + qtteCasesMove);
+                caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
+                caseCourante.setLettre((char) (lettre + qtteCasesMove));
+                caseCourante.setNumero(numero + qtteCasesMove);
+                listeMovesPossibles.add(caseCourante);
+            }
         }
-        for (Case case1 : listeMovesPossibles) {
-            System.out.println("Move possible sur: " + case1.getLettre() + case1.getNumero());
+        for (int i = 0; i < listeMovesPossibles.size(); i++) {
+            System.out.println("Move possible sur: " + listeMovesPossibles.get(i).getLettre()
+                    + listeMovesPossibles.get(i).getNumero());
         }
         return listeMovesPossibles;
     }
