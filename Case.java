@@ -14,6 +14,17 @@ public class Case {
         this.j = j;
     }
 
+    public Case(char lettre, int numero, Piece piece) {
+        this.lettre = lettre;
+        this.numero = numero;
+        this.piece = piece;
+
+        int[] translated = translateCoordinate(lettre, numero);
+        this.i = translated[0];
+        this.j = translated[1];
+    }
+
+    // #region Setters and getters
     public int getI() {
         return this.i;
     }
@@ -54,8 +65,16 @@ public class Case {
         this.j = j;
     }
 
+    // #endregion
+
     // Pour affichage de board dans Board
     public void afficherPiecePrint() {
         System.out.print(this.piece.getNumero() + " \t");
+    }
+
+    private static int[] translateCoordinate(char letter, int number) {
+        int i = number - 1;
+        int j = (int) letter - (int) 'A';
+        return new int[] { i, j };
     }
 }

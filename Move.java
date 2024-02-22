@@ -23,4 +23,9 @@ public class Move {
     public Case getCaseFin() {
         return this.caseFin;
     }
+
+    public String translateToServer() {
+        return String.valueOf(caseDebut.getLettre()) + caseDebut.getNumero() + caseFin.getLettre()
+                + caseFin.getNumero();
+    }
 }
