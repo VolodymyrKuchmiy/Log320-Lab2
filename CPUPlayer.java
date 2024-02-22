@@ -24,6 +24,7 @@ public class CPUPlayer {
             int maxEval = Integer.MIN_VALUE;
             List<Case> playerCases = board.getPlayerCases(piece);
             for (Case playerCase : playerCases) {
+                System.out.println("Case inspectee minmax: " + playerCase.getLettre() + playerCase.getNumero());
                 List<Move> possibleMoves = board.movesPossibles(board.casesPossibles(playerCase), playerCase);
                 for (Move move : possibleMoves) {
                     board.movePiece(move);
