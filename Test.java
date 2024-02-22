@@ -32,7 +32,7 @@ public class Test {
         BufferedOutputStream output;
         Board board = new Board();
         Piece serveur = new Piece(0);
-        Piece ai = new Piece(0);
+        CPUPlayer ai = new CPUPlayer();
 
         try {
             MyClient = new Socket("localhost", 8888);
@@ -48,7 +48,7 @@ public class Test {
                 // Debut de la partie en joueur rouge
                 if (cmd == '1') {
                     serveur = new Piece(2);
-                    ai = new Piece(4);
+                    ai.setPiece(new Piece(4));
                     byte[] aBuffer = new byte[1024];
 
                     int size = input.available();
@@ -59,8 +59,8 @@ public class Test {
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
 
                     // Aller chercher le meilleur move possible
-                    Case debutAI = new Case('A', 2, ai);
-                    Case finAI = new Case('A', 8, ai);
+                    Case debutAI = new Case('A', 2, ai.getPiece());
+                    Case finAI = new Case('A', 8, ai.getPiece());
                     Move moveAI = new Move(debutAI, finAI);
                     String stringMove = moveAI.translateToServer();
 
@@ -70,7 +70,7 @@ public class Test {
                 // Debut de la partie en joueur Noir
                 if (cmd == '2') {
                     serveur = new Piece(4);
-                    ai = new Piece(2);
+                    ai.setPiece(new Piece(2));
                     System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des rouges");
 
                     // Lire le retour de l'adversaire
@@ -104,8 +104,8 @@ public class Test {
 
                     // Creer un nouveau move en fonction du meilleur choix
 
-                    Case debutAI = new Case('B', 1, ai);
-                    Case finAI = new Case('B', 3, ai);
+                    Case debutAI = new Case('B', 1, ai.getPiece());
+                    Case finAI = new Case('B', 3, ai.getPiece());
                     Move moveAI = new Move(debutAI, finAI);
                     board.movePiece(moveAI);
                     String stringMove = moveAI.translateToServer();
