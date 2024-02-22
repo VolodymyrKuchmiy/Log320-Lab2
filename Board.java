@@ -205,7 +205,9 @@ public class Board {
                         caseInspectee.getI(), caseInspectee.getJ());
                 caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
                 caseCourante.setLettre((char) (lettre + qtteCasesMove));
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
             if (horsBoard(caseInspectee.getI(), caseInspectee.getJ() - qtteCasesMove) && i == 0
                     && respecteConditions((char) (caseInspectee.getLettre() - qtteCasesMove),
@@ -216,7 +218,9 @@ public class Board {
                         caseInspectee.getI(), caseInspectee.getJ());
                 caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
                 caseCourante.setLettre((char) (lettre - qtteCasesMove));
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
             // en verticale
             if (horsBoard(caseInspectee.getI() - qtteCasesMove, caseInspectee.getJ()) && i == 1
@@ -227,7 +231,9 @@ public class Board {
                         caseInspectee.getI(), caseInspectee.getJ());
                 caseCourante.setI(caseInspectee.getI() - qtteCasesMove);
                 caseCourante.setNumero(numero + qtteCasesMove);
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
             if (horsBoard(caseInspectee.getI() + qtteCasesMove, caseInspectee.getJ()) && i == 1
                     && respecteConditions(caseInspectee.getLettre(), caseInspectee.getNumero() - qtteCasesMove)) {// vers
@@ -237,7 +243,9 @@ public class Board {
                         caseInspectee.getI(), caseInspectee.getJ());
                 caseCourante.setI(caseInspectee.getI() + qtteCasesMove);
                 caseCourante.setNumero(numero - qtteCasesMove);
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
             // en diagonale haut vers bas
             if (horsBoard(caseInspectee.getI() + qtteCasesMove, caseInspectee.getJ() + qtteCasesMove) && i == 2
@@ -251,7 +259,9 @@ public class Board {
                 caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
                 caseCourante.setLettre((char) (lettre + qtteCasesMove));
                 caseCourante.setNumero(numero - qtteCasesMove);
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
             if (horsBoard(caseInspectee.getI() - qtteCasesMove, caseInspectee.getJ() - qtteCasesMove) && i == 2
                     && respecteConditions((char) (caseInspectee.getLettre() - qtteCasesMove),
@@ -264,7 +274,9 @@ public class Board {
                 caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
                 caseCourante.setLettre((char) (lettre - qtteCasesMove));
                 caseCourante.setNumero(numero + qtteCasesMove);
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
             // en diagonale bas vers haut
             if (horsBoard(caseInspectee.getI() + qtteCasesMove, caseInspectee.getJ() - qtteCasesMove) && i == 3
@@ -278,7 +290,9 @@ public class Board {
                 caseCourante.setJ(caseInspectee.getJ() - qtteCasesMove);
                 caseCourante.setLettre((char) (lettre - qtteCasesMove));
                 caseCourante.setNumero(numero - qtteCasesMove);
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
             if (horsBoard(caseInspectee.getI() - qtteCasesMove, caseInspectee.getJ() + qtteCasesMove) && i == 3
                     && respecteConditions((char) (caseInspectee.getLettre() + qtteCasesMove),
@@ -291,7 +305,9 @@ public class Board {
                 caseCourante.setJ(caseInspectee.getJ() + qtteCasesMove);
                 caseCourante.setLettre((char) (lettre + qtteCasesMove));
                 caseCourante.setNumero(numero + qtteCasesMove);
-                listeMovesPossibles.add(caseCourante);
+                if (cheminContientCaseAdverse(caseInspectee, caseCourante, qtteCasesMove)) {
+                    listeMovesPossibles.add(caseCourante);
+                }
             }
         }
         for (int i = 0; i < listeMovesPossibles.size(); i++) {
@@ -299,6 +315,89 @@ public class Board {
                     + listeMovesPossibles.get(i).getNumero());
         }
         return listeMovesPossibles;
+    }
+
+    // methode qui regarde si la case destination a la meme piece que case inspectee
+    // aussi on regarde s'il y a une case adverse sur le chemin
+    private boolean cheminContientCaseAdverse(Case caseInspectee, Case caseDestination, int longueurMove) {
+        boolean aucunAdversaire = true;
+        int coordonneeI = getCase(caseInspectee)[0];
+        int coordonneeJ = getCase(caseInspectee)[1];
+        for (int i = 0; i < longueurMove - 1; i++) { // moins 1 pour pouvoir se deplacer vers la case qui contient piece
+                                                     // adversaire
+            int directionI = (caseDestination.getI() - caseInspectee.getI()) / longueurMove;
+            int directionJ = (caseDestination.getJ() - caseInspectee.getJ()) / longueurMove;
+            coordonneeI = coordonneeI + directionI;
+            coordonneeJ = coordonneeJ + directionJ;
+            Case caseCourante = obtenirCaseAPartirCoordonnees(coordonneeI, coordonneeJ);
+            if (caseCourante.getPiece().getNumero() != caseInspectee.getPiece().getNumero()
+                    && caseCourante.getPiece().getNumero() != 0) { // si casecourante contient case adverse
+                aucunAdversaire = false;
+            }
+        }
+        return aucunAdversaire;
+    }
+
+    public boolean areAllPiecesConnected(Piece playerPiece) {
+        boolean[][] visited = new boolean[DIMENSION_HAUTEUR][DIMENSION_LARGEUR];
+        int totalPieces = countTotalPlayerPieces(playerPiece);
+        int connectedPieces = 0;
+
+        // Trouver la première pièce du joueur et commencer la recherche à partir de là.
+        for (int y = 0; y < DIMENSION_HAUTEUR; y++) {
+            for (int x = 0; x < DIMENSION_LARGEUR; x++) {
+                if (board[y][x].getPiece().getNumero() == playerPiece.getNumero()) {
+                    connectedPieces = dfsConnectedPieces(x, y, visited, playerPiece);
+                    // Si le nombre de pièces connectées trouvé est égal au total, toutes les pièces
+                    // sont connectées.
+                    return connectedPieces == totalPieces;
+                }
+            }
+        }
+
+        // Si aucune pièce n'est trouvée (ce qui est improbable dans le cadre normal du
+        // jeu), considérer comme non connecté.
+        return false;
+    }
+
+    private int dfsConnectedPieces(int x, int y, boolean[][] visited, Piece playerPiece) {
+        // Base case: vérifier les limites et si la case a été visitée ou n'appartient
+        // pas au joueur.
+        if (x < 0 && y < 0 && x >= DIMENSION_LARGEUR && y >= DIMENSION_HAUTEUR && visited[y][x]
+                || board[y][x].getPiece().getNumero() != playerPiece.getNumero()) {
+            return 0;
+        }
+
+        visited[y][x] = true;
+        int count = 1; // Compte cette pièce comme connectée.
+
+        // Directions possibles pour se déplacer (horizontalement, verticalement, et
+        // diagonalement).
+        int[] dx = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        int[] dy = { -1, -1, -1, 0, 0, 1, 1, 1 };
+
+        // Parcourir toutes les directions.
+        for (int i = 0; i < dx.length; i++) {
+            count += dfsConnectedPieces(x + dx[i], y + dy[i], visited, playerPiece);
+        }
+
+        return count;
+    }
+
+    private int countTotalPlayerPieces(Piece playerPiece) {
+        int count = 0;
+        for (int y = 0; y < DIMENSION_HAUTEUR; y++) {
+            for (int x = 0; x < DIMENSION_LARGEUR; x++) {
+                if (board[y][x].getPiece().getNumero() == playerPiece.getNumero()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public boolean isGameOver(Piece playerPiece) {
+        return areAllPiecesConnected(playerPiece);
     }
 
 }
