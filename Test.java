@@ -9,7 +9,8 @@ public class Test {
 
     // Class qui sert a faire des tests;
     public static void main(String[] args) {
-        TestServeur();
+        // TestServeur();
+        Debug();
     }
 
     public static void Debug() {
@@ -25,7 +26,10 @@ public class Test {
         // de movesPossibles
         board.afficherBoardPrint();
         // board.obtenirNbPieces(caseFinale);
-        board.movesPossibles(caseInitiale);
+        // board.casesPossibles(caseInitiale);
+        CPUPlayer cpuPlayer = new CPUPlayer();
+        cpuPlayer.setPiece(new Piece(4));
+        cpuPlayer.minimax(board, 2, Integer.MAX_VALUE, Integer.MIN_VALUE, true, cpuPlayer.getPiece());
     }
 
     public static void TestServeur() {

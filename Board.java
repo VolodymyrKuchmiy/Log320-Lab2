@@ -187,7 +187,7 @@ public class Board {
     }
 
     // retourne un tableau de longueurMoves possibles pour une piece concrete
-    public List<Case> movesPossibles(Case caseInspectee) {
+    public List<Case> casesPossibles(Case caseInspectee) {
 
         List<Case> listeMovesPossibles = new ArrayList<Case>();
         int[] longueurMoves = obtenirNbPieces(caseInspectee);
@@ -338,6 +338,15 @@ public class Board {
         return aucunAdversaire;
     }
 
+    public List<Move> movesPossibles(List<Case> casesPossibles, Case caseDebut) {
+        List<Move> movePossibles = new ArrayList<>();
+        for (Case case1 : casesPossibles) {
+            Move newMove = new Move(caseDebut, case1);
+            movePossibles.add(newMove);
+        }
+        return movePossibles;
+    }
+
     public boolean areAllPiecesConnected(Piece playerPiece) {
         boolean[][] visited = new boolean[DIMENSION_HAUTEUR][DIMENSION_LARGEUR];
         int totalPieces = countTotalPlayerPieces(playerPiece);
@@ -398,6 +407,49 @@ public class Board {
 
     public boolean isGameOver(Piece playerPiece) {
         return areAllPiecesConnected(playerPiece);
+    }
+
+    public int evaluateGameState(Piece playerPiece) {
+        int score = 0;
+        // Calcul de la différence entre le nombre de pièces du joueur et de
+        // l'adversaire
+        int playerPiecesCount = countTotalPlayerPieces(playerPiece);
+        Piece enemyPiece;
+        if (playerPiece.getNumero() == 2 && playerPiece.getNumero() != 0) {
+            enemyPiece = new Piece(4); // fonction
+        } else {
+            enemyPiece = new Piece(2);
+        }
+        int enemyPiecesCount = countTotalPlayerPieces(enemyPiece);
+
+        // Prioriser les états où le joueur a un avantage numérique
+        score += (playerPiecesCount - enemyPiecesCount) * 100;
+
+        // Bonus si toutes les pièces du joueur sont connectées
+        if (areAllPiecesConnected(playerPiece)) {
+            score += 10000;
+        }
+
+        // Pénalité si toutes les pièces de l'adversaire sont connectées
+        if (areAllPiecesConnected(enemyPiece)) {
+            score -= 10000;
+        }
+
+        // Autres critères d'évaluation peuvent être ajoutés ici
+
+        return score;
+    }
+
+    public List<Case> getPlayerCases(Piece playerPiece) {
+        List<Case> playerCases = new ArrayList<>();
+        for (int y = 0; y < DIMENSION_HAUTEUR; y++) {
+            for (int x = 0; x < DIMENSION_LARGEUR; x++) {
+                if (this.board[y][x].getPiece().getNumero() == playerPiece.getNumero()) {
+                    playerCases.add(this.board[y][x]);
+                }
+            }
+        }
+        return playerCases;
     }
 
 }
