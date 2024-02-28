@@ -1,14 +1,11 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Board {
 
     private static final int DIMENSION_LARGEUR = 8;
     private static final int DIMENSION_HAUTEUR = 8;
     private Case[][] board;
-    private int[] compteurPieces = { 12, 12 }; // chaque indice indique qtte pieces pour un joueur
 
     public Board() {
         this.board = initialiserBoard();
@@ -100,15 +97,6 @@ public class Board {
         this.board[finalCords[0]][finalCords[1]].getPiece().setNumero(move.getCaseDebut().getPiece().getNumero());
         this.board[initialCords[0]][initialCords[1]].getPiece().setNumero(0); // supposant qu'apres le mouvement, la
                                                                               // case initiale sera vide
-    }
-
-    // pour obtenir un tableau de case voisines pour une case concrete.
-    // on peut avoir besoin de ce methode pour condition de victoire.
-    // retourne tableau autour de la case.
-    public void obtenirCasesVoisins(Case caseInspectee) {
-        int x = getCase(caseInspectee)[0];
-        int y = getCase(caseInspectee)[1];
-
     }
 
     // methode extremment pas optimisee
