@@ -323,8 +323,9 @@ public class Board {
             }
         }
         for (int i = 0; i < listeMovesPossibles.size(); i++) {
-            System.out.println("Move possible sur: " + listeMovesPossibles.get(i).getLettre()
-                    + listeMovesPossibles.get(i).getNumero());
+            // System.out.println("Move possible sur: " +
+            // listeMovesPossibles.get(i).getLettre()
+            // + listeMovesPossibles.get(i).getNumero());
         }
         return listeMovesPossibles;
     }

@@ -16,8 +16,8 @@ public class CPUPlayer {
     }
 
     public int minimax(Board board, int depth, int alpha, int beta, boolean isMaximizingPlayer, Piece playerPiece) {
+        System.out.println("board evalue avec alpha: " + alpha + ", beta: " + beta + " et profondeur: " + depth);
         if (depth == 0 || board.isGameOver(piece)) { // a voir
-            System.out.println("board evalue");
             return board.evaluateGameState(piece);
         }
         if (isMaximizingPlayer) {
@@ -48,6 +48,8 @@ public class CPUPlayer {
             }
             List<Case> opponentCases = board.getPlayerCases(opponentPiece);
             for (Case opponentCase : opponentCases) {
+                System.out.println("Case inspectee minmax: " + opponentCase.getLettre() + opponentCase.getNumero()
+                        + " pour la piece " + opponentPiece.getCase());
                 List<Move> possibleMoves = board.movesPossibles(board.casesPossibles(opponentCase), opponentCase);
                 for (Move move : possibleMoves) {
                     board.movePiece(move);
