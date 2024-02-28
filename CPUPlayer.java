@@ -50,6 +50,7 @@ public class CPUPlayer {
             for (Case opponentCase : opponentCases) {
                 System.out.println("Case inspectee minmax: " + opponentCase.getLettre() + opponentCase.getNumero()
                         + " pour la piece " + opponentPiece.getCase());
+                board.afficherBoardPrint();
                 List<Move> possibleMoves = board.movesPossibles(board.casesPossibles(opponentCase), opponentCase);
                 for (Move move : possibleMoves) {
                     board.movePiece(move);
