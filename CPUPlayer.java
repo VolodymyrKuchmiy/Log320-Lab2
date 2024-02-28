@@ -40,6 +40,16 @@ public class CPUPlayer {
         return minValue;
     }
 
+    public int getCleMax() {
+        int maxValue = Integer.MIN_VALUE;
+        for (int key : this.hashMapMoves.keySet()) {
+            if (key > maxValue) {
+                maxValue = key;
+            }
+        }
+        return maxValue;
+    }
+
     public CPUPlayer() {
     }
 
@@ -58,7 +68,7 @@ public class CPUPlayer {
             return board.evaluateGameState(piece);
         }
 
-        if (!isMaximizingPlayer) {
+        if (isMaximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
             List<Case> playerCases = board.getPlayerCases(piece);
             for (Case playerCase : playerCases) {
@@ -71,11 +81,16 @@ public class CPUPlayer {
                     int eval = minimax(newBoard, depth - 1, alpha, beta, false, playerPiece);
                     maxEval = Math.max(maxEval, eval);
                     alpha = Math.max(alpha, eval);
+                    if (!hashMapMoves.containsKey(maxEval)) {
+                        hashMapMoves.put(maxEval, move);
+                    }
                     if (beta <= alpha) {
                         break;
                     }
                 }
             }
+
+            setCurrentBestMove(this.hashMapMoves.get(getCleMax()));
             System.out.println("MaxEval " + maxEval);
             return maxEval;
         } else {
@@ -115,6 +130,7 @@ public class CPUPlayer {
                 }
             }
             setCurrentBestMove(this.hashMapMoves.get(getCleMin()));
+            System.out.println("MinEval " + minEval);
             return minEval;
         }
 
