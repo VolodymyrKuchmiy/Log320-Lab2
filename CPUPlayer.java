@@ -16,14 +16,17 @@ public class CPUPlayer {
     }
 
     public int minimax(Board board, int depth, int alpha, int beta, boolean isMaximizingPlayer, Piece playerPiece) {
-        System.out.println("board evalue avec alpha: " + alpha + ", beta: " + beta + " et profondeur: " + depth);
         if (depth == 0 || board.isGameOver(piece)) { // a voir
+            // System.out.println("board evalue avec alpha: " + alpha + ", beta: " + beta +
+            // " et profondeur: " + depth);
             return board.evaluateGameState(piece);
         }
-        if (isMaximizingPlayer) {
+        if (!isMaximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
             List<Case> playerCases = board.getPlayerCases(piece);
             for (Case playerCase : playerCases) {
+                System.out.println();
+                board.afficherBoardPrint();
                 List<Move> possibleMoves = board.movesPossibles(board.casesPossibles(playerCase), playerCase);
                 for (Move move : possibleMoves) {
                     board.movePiece(move);
@@ -36,6 +39,7 @@ public class CPUPlayer {
                     }
                 }
             }
+            System.out.println("MaxEval " + maxEval);
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
@@ -47,8 +51,10 @@ public class CPUPlayer {
             }
             List<Case> opponentCases = board.getPlayerCases(opponentPiece);
             for (Case opponentCase : opponentCases) {
-                System.out.println("Case inspectee minmax: " + opponentCase.getLettre() + opponentCase.getNumero()
-                        + " pour la piece " + opponentPiece.getCase());
+                // System.out.println("Case inspectee minmax: " + opponentCase.getLettre() +
+                // opponentCase.getNumero()
+                // + " pour la piece " + opponentPiece.getCase());
+                System.out.println();
                 board.afficherBoardPrint();
                 List<Move> possibleMoves = board.movesPossibles(board.casesPossibles(opponentCase), opponentCase);
                 for (Move move : possibleMoves) {
@@ -62,6 +68,7 @@ public class CPUPlayer {
                     }
                 }
             }
+            System.out.println("MinEval " + minEval);
             return minEval;
         }
 

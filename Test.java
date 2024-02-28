@@ -13,12 +13,16 @@ public class Test {
         Case caseIntermidiaire = new Case('B', 1, new Piece(2), 7, 1);
         Case caseFinale = new Case('B', 2, new Piece(4), 6, 1);
         Move move1 = new Move(caseIntermidiaire, caseFinale);
-        board.movePiece(move1); // pour tester mouvements, et dans futur, evaluation
+        // board.movePiece(move1); // pour tester mouvements, et dans futur, evaluation
         // de movesPossibles
         board.afficherBoardPrint();
         CPUPlayer cpuPlayer = new CPUPlayer();
+        CPUPlayer cpuPlayer2 = new CPUPlayer();
         cpuPlayer.setPiece(new Piece(4));
-        cpuPlayer.minimax(board, 2, Integer.MAX_VALUE, Integer.MIN_VALUE, true, cpuPlayer.getPiece());
+        cpuPlayer2.setPiece(new Piece(2));
+        cpuPlayer.minimax(board, 3, Integer.MAX_VALUE, Integer.MIN_VALUE, true, cpuPlayer.getPiece());
+        // cpuPlayer2.minimax(board, 3, Integer.MAX_VALUE, Integer.MIN_VALUE, false,
+        // cpuPlayer2.getPiece());
         ControlleurServeur controlleurServeur = new ControlleurServeur();
     }
 

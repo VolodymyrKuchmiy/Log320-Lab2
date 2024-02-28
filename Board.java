@@ -428,6 +428,7 @@ public class Board {
         return areAllPiecesConnected(playerPiece);
     }
 
+    // voir si avantage numerique est mieux que desavantage numerique dans ce jeu
     public int evaluateGameState(Piece playerPiece) {
         int score = 0;
         // Calcul de la différence entre le nombre de pièces du joueur et de
@@ -446,12 +447,12 @@ public class Board {
 
         // Bonus si toutes les pièces du joueur sont connectées
         if (areAllPiecesConnected(playerPiece)) {
-            score += 10000;
+            score += 100000;
         }
 
         // Pénalité si toutes les pièces de l'adversaire sont connectées
         if (areAllPiecesConnected(enemyPiece)) {
-            score -= 10000;
+            score -= 100000;
         }
 
         // Autres critères d'évaluation peuvent être ajoutés ici
