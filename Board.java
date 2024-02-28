@@ -12,6 +12,21 @@ public class Board {
         initialiserPieces();
     }
 
+    // methode pour copier board
+    public Case[][] copierBoard(Board boardACopier) {
+        Case[][] newBoard = new Case[DIMENSION_LARGEUR][DIMENSION_HAUTEUR];
+
+        for (int i = 0; i < DIMENSION_HAUTEUR; i++) {
+            for (int j = 0; j < DIMENSION_LARGEUR; j++) {
+                Case caseACopier = boardACopier.obtenirCaseAPartirCoordonnees(i, j);
+                newBoard[i][j] = new Case(caseACopier.getLettre(),
+                        caseACopier.getNumero(),
+                        caseACopier.getPiece(), i, j);
+            }
+        }
+        return newBoard;
+    }
+
     // fonction qui initialise le board. Elle remplit le board avec cases vides et
     // le retourne
     public Case[][] initialiserBoard() {
