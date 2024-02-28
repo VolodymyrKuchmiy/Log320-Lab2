@@ -130,7 +130,7 @@ public class CPUPlayer {
                 }
             }
             setCurrentBestMove(this.hashMapMoves.get(getCleMin()));
-            System.out.println("MinEval " + minEval);
+            System.out.println("MinEval  " + minEval);
             return minEval;
         }
 
