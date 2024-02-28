@@ -17,13 +17,12 @@ public class Test {
         // de movesPossibles
         board.afficherBoardPrint();
         CPUPlayer cpuPlayer = new CPUPlayer();
-        CPUPlayer cpuPlayer2 = new CPUPlayer();
         cpuPlayer.setPiece(new Piece(4));
-        cpuPlayer2.setPiece(new Piece(2));
-        cpuPlayer.minimax(board, 3, Integer.MAX_VALUE, Integer.MIN_VALUE, true, cpuPlayer.getPiece());
-        // cpuPlayer2.minimax(board, 3, Integer.MAX_VALUE, Integer.MIN_VALUE, false,
-        // cpuPlayer2.getPiece());
-        ControlleurServeur controlleurServeur = new ControlleurServeur();
+        CPUPlayer cpuPlayer2 = new CPUPlayer();
+        cpuPlayer.minimax(board, 3, Integer.MAX_VALUE, Integer.MIN_VALUE, true,
+                cpuPlayer.getPiece());
+        // ControlleurServeur controlleurServeur = new ControlleurServeur();
+        // controlleurServeur.TestServeur(board, cpuPlayer);
     }
 
 }

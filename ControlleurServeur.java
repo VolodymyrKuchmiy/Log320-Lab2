@@ -7,13 +7,13 @@ import java.net.Socket;
 
 public class ControlleurServeur {
 
-    public static void TestServeur() {
+    public void TestServeur(Board boardJeu, CPUPlayer cpuPlayer) {
         Socket MyClient;
         BufferedInputStream input;
         BufferedOutputStream output;
-        Board board = new Board();
+        Board board = boardJeu;
         Piece serveur = new Piece(0);
-        CPUPlayer ai = new CPUPlayer();
+        CPUPlayer ai = cpuPlayer;
 
         try {
             MyClient = new Socket("localhost", 8888);
@@ -26,7 +26,7 @@ public class ControlleurServeur {
 
                 cmd = (char) input.read();
                 System.out.println("cmd: " + cmd);
-                // Debut de la partie en joueur rouge
+                // Debut de la partie en ai rouge
                 if (cmd == '1') {
                     serveur = new Piece(2);
                     ai.setPiece(new Piece(4));
