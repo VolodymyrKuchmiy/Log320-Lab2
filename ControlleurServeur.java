@@ -40,10 +40,11 @@ public class ControlleurServeur {
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
 
                     // Aller chercher le meilleur move possible
-                    Case debutAI = new Case('A', 2, ai.getPiece());
-                    Case finAI = new Case('A', 8, ai.getPiece());
-                    Move moveAI = new Move(debutAI, finAI);
-                    String stringMove = moveAI.translateToServer();
+                    // Case debutAI = new Case('A', 2, ai.getPiece());
+                    // Case finAI = new Case('A', 8, ai.getPiece());
+                    // Move moveAI = new Move(debutAI, finAI);
+
+                    String stringMove = cpuPlayer.getCurrentBestMove().translateToServer();
 
                     output.write(stringMove.getBytes(), 0, stringMove.length());
                     output.flush();

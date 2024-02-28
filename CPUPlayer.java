@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -6,6 +5,15 @@ import java.util.Map;
 public class CPUPlayer {
     private Piece piece;
     private Map<Integer, Move> hashMapMoves = new HashMap<>();
+    private Move currentBestMove = new Move(null, null);
+
+    public Move getCurrentBestMove() {
+        return currentBestMove;
+    }
+
+    public void setCurrentBestMove(Move currentBestMove) {
+        this.currentBestMove = currentBestMove;
+    }
 
     // Method to add an object to the HashMap
     public void addObject(int key, Move move) {
@@ -23,10 +31,7 @@ public class CPUPlayer {
     }
 
     public int getCleMin() {
-
         int minValue = Integer.MAX_VALUE;
-
-        // Iterate over the key set
         for (int key : this.hashMapMoves.keySet()) {
             if (key < minValue) {
                 minValue = key;
@@ -98,19 +103,18 @@ public class CPUPlayer {
 
                     if (!hashMapMoves.containsKey(minEval)) {
                         hashMapMoves.put(minEval, move);
-                        System.out.println(
-                                "Cle:" + this.getObject(minEval).getCaseDebut().getLettre()
-                                        + this.getObject(minEval).getCaseDebut().getNumero()
-                                        + this.getObject(minEval).getCaseFin().getLettre()
-                                        + this.getObject(minEval).getCaseFin().getNumero());
-                        System.out.println(this.hashMapMoves.keySet().size());
+                        // System.out.println(
+                        // "Cle:" + this.getObject(minEval).getCaseDebut().getLettre()
+                        // + this.getObject(minEval).getCaseDebut().getNumero()
+                        // + this.getObject(minEval).getCaseFin().getLettre()
+                        // + this.getObject(minEval).getCaseFin().getNumero());
                     }
                     if (beta <= alpha) {
                         break;
                     }
                 }
             }
-            System.out.println("MinEval " + minEval);
+            setCurrentBestMove(this.hashMapMoves.get(getCleMin()));
             return minEval;
         }
 
