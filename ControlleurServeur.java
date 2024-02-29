@@ -43,9 +43,12 @@ public class ControlleurServeur {
                     // Case debutAI = new Case('A', 2, ai.getPiece());
                     // Case finAI = new Case('A', 8, ai.getPiece());
                     // Move moveAI = new Move(debutAI, finAI);
-
+                    cpuPlayer.minimaxAlphaBeta(board, 3, Integer.MIN_VALUE, Integer.MAX_VALUE,
+                            true, ai.getPiece());
+                    // cpuPlayer.minimax(board, 3, true, ai.getPiece());
+                    board.afficherBoardPrint();
                     String stringMove = cpuPlayer.getCurrentBestMove().translateToServer();
-
+                    System.out.println(stringMove);
                     output.write(stringMove.getBytes(), 0, stringMove.length());
                     output.flush();
                 }
@@ -61,6 +64,7 @@ public class ControlleurServeur {
                     input.read(aBuffer, 0, size);
                     String s = new String(aBuffer).trim(); // Dernier état du tableau (il n'y a pas eu de move de la
                                                            // part des rouges encore)
+
                 }
 
                 // Le serveur demande le prochain coup (FORMAT: A1-B2 ou A1B2 )
@@ -83,19 +87,20 @@ public class ControlleurServeur {
                     Case fin = new Case(chars[2], Character.getNumericValue(chars[3]), serveur);
                     Move lastMove = new Move(debut, fin);
                     board.movePiece(lastMove);
-
+                    board.afficherBoardPrint();
                     // Creer un nouveau move en fonction du meilleur choix
 
-                    Case debutAI = new Case('B', 1, ai.getPiece());
-                    Case finAI = new Case('B', 3, ai.getPiece());
-                    Move moveAI = new Move(debutAI, finAI);
-                    board.movePiece(moveAI);
-                    String stringMove = moveAI.translateToServer();
+                    cpuPlayer.minimaxAlphaBeta(board, 3, Integer.MIN_VALUE, Integer.MAX_VALUE,
+                            true, ai.getPiece());
+                    // cpuPlayer.minimax(board, 3, true, ai.getPiece());
+                    String stringMove = cpuPlayer.getCurrentBestMove().translateToServer();
+                    System.out.println(stringMove);
                     output.write(stringMove.getBytes(), 0, stringMove.length());
                     output.flush();
                 }
                 // Le dernier coup est invalide
                 if (cmd == '4') {
+                    // board.afficherBoardPrint();
                     System.out.println("Coup invalide, entrez un nouveau coup : ");
                     String move = null;
                     move = console.readLine();
