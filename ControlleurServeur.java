@@ -26,7 +26,7 @@ public class ControlleurServeur {
 
                 cmd = (char) input.read();
                 System.out.println("cmd: " + cmd);
-                // Debut de la partie en ai rouge
+                // Debut de la partie en joueur rouge
                 if (cmd == '1') {
                     serveur = new Piece(2);
                     ai.setPiece(new Piece(4));

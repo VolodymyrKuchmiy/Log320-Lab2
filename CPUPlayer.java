@@ -35,6 +35,19 @@ public class CPUPlayer {
         return minValue;
     }
 
+    public int getCleMax() {
+
+        int maxValue = Integer.MAX_VALUE;
+
+        // Iterate over the key set
+        for (int key : this.hashMapMoves.keySet()) {
+            if (key < maxValue) {
+                maxValue = key;
+            }
+        }
+        return maxValue;
+    }
+
     public CPUPlayer() {
     }
 
